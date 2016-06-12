@@ -28,17 +28,17 @@ def rollArray(arr, direction):
             new[:,direction[2]] = arr[0,:,direction[2]]
     return np.expand_dims(new, axis=0) 
 
-def makeFlows(arr, shiftd, fdr, path):
-    iso = np.not_equal(arr, shiftd)
-    arr = iso * np.equal(fdr,path) * arr
+def makeFlows(arr, shiftd, fdr, path, nd):
+    iso = np.not_equal(arr, shiftd) * np.not_equal(shiftd, nd) 
+    arr = iso * np.equal(fdr,path) * arr 
     shiftd = iso * np.equal(fdr,path) * shiftd
     return pd.DataFrame({'TOCOMID' : arr[np.not_equal(arr,shiftd)], 
                              'FROMCOMID' : shiftd[np.not_equal(arr,shiftd)],
                                 'move' : path})
 
-def compAll(arr,fdr,moves,flows):
+def compAll(arr,fdr,moves,flows, nd):
     for move in moves:
-        flow = makeFlows(arr, rollArray(arr, moves[move][0]), fdr, moves[move][1])
+        flow = makeFlows(arr, rollArray(arr, moves[move][0]), fdr, moves[move][1], nd)
         flows = pd.concat([flows,flow])
     return flows
     
@@ -50,18 +50,19 @@ with rio.open('G:/data/test_wsheds.tif') as src:
 with rio.open('G:/data/test_fdr.tif') as src:
     profile2 = src.profile.copy()
     fdr = src.read()  
-
+nd = profile['nodata']
 
 flows = pd.DataFrame()
-flows = compAll(data,fdr,moves,flows)
+flows = compAll(data,fdr,moves,flows,nd)
 flows2 = flows.drop_duplicates()
 flows3 = flows2.ix[flows2.FROMCOMID != -2147483647]
-flows2.ix[flows2.TOCOMID == -2147483647]
+flows.ix[flows.FROMCOMID == -2147483647]
 print flows
 profile2
-    
+type(nd) 
+type(data[0,0,0]) 
 chk = dbf2DF('D:/Projects/lakesAnalysis/From_To_Tables710/LkFrmTo_R01a.dbf')
-    
+
 np.not_equal(t, 33)
 t = np.array(np.arange(100))
 t.shape = (1,10,10)
@@ -91,7 +92,7 @@ print flows
 basns = np.array(np.arange(100))
 basns.shape = (1,10,10)
 
-shift1 = rollArray(t, moves['left'][0])
+shift1 = rollArray(data, moves['left'][0])
 shift2 = rollArray(t, moves['upLeft'][0])
 shift4 = rollArray(t, moves['up'][0])
 shift8 = rollArray(t, moves['upRight'][0])
@@ -100,6 +101,8 @@ shift32 = rollArray(t, moves['downRight'][0])
 shift64 = rollArray(t, moves['down'][0])
 shift128 = rollArray(t, moves['downLeft'][0])
 
+ np.not_equal(data, shift1) * np.not_equal(shift1, nd)
+nd = 67
 #load fdr
 fdr = np.ones((1,10,10))
 fdr[:] = 8
