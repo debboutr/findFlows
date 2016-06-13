@@ -32,8 +32,8 @@ def makeFlows(arr, shiftd, fdr, path, nd):
     iso = np.not_equal(arr, shiftd) * np.not_equal(shiftd, nd) 
     arr = iso * np.equal(fdr,path) * arr 
     shiftd = iso * np.equal(fdr,path) * shiftd
-    return pd.DataFrame({'TOCOMID' : arr[np.not_equal(arr,shiftd)], 
-                             'FROMCOMID' : shiftd[np.not_equal(arr,shiftd)],
+    return pd.DataFrame({'TOCOMID' : shiftd[np.not_equal(arr,shiftd)], 
+                             'FROMCOMID' : arr[np.not_equal(arr,shiftd)],
                                 'move' : path})
 
 def compAll(arr,fdr,moves,flows, nd):
