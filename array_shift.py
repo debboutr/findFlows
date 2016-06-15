@@ -58,10 +58,10 @@ if __name__ == '__main__':
 	import numpy as np
 	import pandas as pd
 	import rasterio as rio
-    zone_file = sys.argv[1]
+	zone_file = sys.argv[1]
 	fdr_file = sys.argv[2]
 	out_file = sys.argv[3]
-	main(zone_file, fdr_file, out_file)
+	main(zone_file, fdr_file, out_file)											
 	
 
 
