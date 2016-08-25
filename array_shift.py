@@ -48,7 +48,7 @@ def main(zf, ff, of):
 
 	nd = profile['nodata']
 	flows = pd.DataFrame()
-	flows = compAll(data,fdr,moves,flows,nd).drop_duplicates()
+	flows = compAll(data,fdr,moves,flows,nd).drop_duplicates(['FROMCOMID','TOCOMID'])
 	flows.to_csv(of, index=False)
 	print "Finished flow table: %s" % of
 
