@@ -50,7 +50,7 @@ def main(zf, ff, of):
 	flows = pd.DataFrame()
 	flows = compAll(data,fdr,moves,flows,nd).drop_duplicates()
 	flows.to_csv(of)
-	return "Finished flow table: %s" % of
+	print "Finished flow table: %s" % of
 
 ############################################################################### 
 if __name__ == '__main__':
