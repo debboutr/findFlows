@@ -25,7 +25,8 @@ def rollArray(a, d):
     return np.expand_dims(new, axis=0) 
 
 def makeFlows(arr, shiftd, fdr, path, nd):
-    iso = np.not_equal(arr, shiftd) * np.not_equal(shiftd, nd)  # cells change value after shift * cells not equal to NoData
+    # cells change value after shift * cells not equal to NoData
+    iso = np.not_equal(arr, shiftd) * np.not_equal(shiftd, nd) * np.not_equal(arr, nd)
     pth = np.equal(fdr,path)  # True when equal to path value
     val = iso * pth * arr 
     shiftval = iso * pth * shiftd
